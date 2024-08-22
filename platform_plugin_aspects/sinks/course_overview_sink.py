@@ -45,11 +45,14 @@ class XBlockSink(ModelBaseSink):
 
     def dump_related(self, serialized_item, dump_id, time_last_dumped):
         """Dump all XBlocks for a course"""
-        self.dump(
-            serialized_item,
-            many=True,
-            initial={"dump_id": dump_id, "time_last_dumped": time_last_dumped},
-        )
+        try:
+            self.dump(
+                serialized_item,
+                many=True,
+                initial={"dump_id": dump_id, "time_last_dumped": time_last_dumped},
+            )
+        except Exception:
+            pass
 
     def get_xblocks_recursive(self, parent_block, detached_xblock_types, initial):
         """
@@ -59,6 +62,9 @@ class XBlockSink(ModelBaseSink):
         in get_detached_xblocks. This method preserves the course ordering for
         non-detached blocks.
         """
+        if parent_block is None:
+            return []
+
         items = [
             self.serialize_xblock(
                 parent_block,
