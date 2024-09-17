@@ -175,7 +175,7 @@ class ModelBaseSink(BaseSink):
             # If we're dumping many items, we expect to get a list of items
             serialized_item = self.serialize_item(item_id, many=many, initial=initial)
             self.log.info(
-                f"Now dumping {len(serialized_item)} {self.name} to ClickHouse",
+                f"Now dumping {len(serialized_item)} {self.name} {item_id} to ClickHouse",
             )
             self.send_item_and_log(item_id, serialized_item, many)
             self.log.info(

@@ -109,6 +109,7 @@ class XBlockSink(ModelBaseSink):
         course_block = modulestore.get_course(
             course_key, revision=MODULESTORE_PUBLISHED_ONLY_FLAG
         )
+        print("course key is", course_key)
 
         items = self.get_xblocks_recursive(course_block, detached_xblock_types, initial)
 
@@ -163,9 +164,12 @@ class XBlockSink(ModelBaseSink):
 
     def serialize_xblock(self, item, detached_xblock_types, dump_id, time_last_dumped):
         """Serialize an XBlock instance into a dict"""
+        print("item is",item)
         course_key = item.scope_ids.usage_id.course_key
-        block_type = item.scope_ids.block_type
 
+        block_type = item.scope_ids.block_type
+        print("course key is",course_key)
+        # print("componenet type",
         # Extra data not needed for the table to function, things can be
         # added here without needing to rebuild the whole table.
         json_data = {
