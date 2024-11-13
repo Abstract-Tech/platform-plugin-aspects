@@ -17,6 +17,7 @@ from django.urls import reverse
 from requests.exceptions import HTTPError
 from supersetapiclient.client import SupersetClient
 from xblock.reference.user_service import XBlockUser
+from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +55,7 @@ def generate_superset_context(
         language (str): the language code of the end user.
     """
     course_id = context["course_id"]
+    course_org = context["course_org"]
     superset_config = settings.SUPERSET_CONFIG
 
     # We're modifying this, keep a local copy
@@ -70,7 +72,10 @@ def generate_superset_context(
 
     # Use an absolute LMS URL here, just in case we're being rendered in an MFE.
     guest_token_url = urljoin(
-        settings.LMS_ROOT_URL,
+        SiteConfiguration.get_value_for_org(
+            course_org,
+            "LMS_ROOT_URL",
+            settings.LMS_ROOT_URL),
         reverse(
             "platform_plugin_aspects:superset_guest_token",
             kwargs={"course_id": course_id},

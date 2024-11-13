@@ -49,6 +49,7 @@ class AddSupersetTab(PipelineStep):
             formatted_language = "en"
 
         context["course_id"] = course.id
+        context["course_org"] = course.org
         context = generate_superset_context(
             context,
             dashboards=dashboards,
